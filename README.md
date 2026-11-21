@@ -6,7 +6,7 @@
 
 本机的学习路线位于 `learning_notes/00_从CUDA基础到手写Marlin路线.md`。我们先复习线程、内存、同步和 tiled GEMM，再阅读 Marlin 的入口、权重布局和 kernel，最后逐版独立实现和测量。
 
-`learning_notes/` 按约定被 Git 忽略，**不会同步到 GitHub**。在另一台机器克隆本仓库后，需要另行准备这些私有笔记。当前机器上的冻结参考实现位于同级的 `../vllm-from-scratch/`，参考范围和来源见 [Marlin 源码导航](docs/Marlin源码导航.md)。
+`learning_notes/` 按约定被 Git 忽略，**不会同步到 GitHub**。在另一台机器克隆本仓库后，需要另行准备这些私有笔记。Marlin 学习源码快照位于 `third_party/vllm_marlin/`，已经随本仓库同步；参考范围、许可证和 VS Code 设置见 [Marlin 源码导航](docs/Marlin源码导航.md)。
 
 ## 目录
 
@@ -16,6 +16,8 @@
 - `profiling/`：profiler 采集脚本和分析入口；大型原始结果保存在忽略目录。
 - `docs/`：可以公开同步的设计、布局图和实验结论。
 - `scripts/`：本机环境检查等辅助脚本。
+- `third_party/`：可在工作区直接查看的 Marlin 参考源码与出处。
+- `.vscode/`：CUDA/C++ IntelliSense 和扩展推荐。
 - `learning_notes/`：不跟踪的学习路线与个人笔记。
 
 ## 环境检查

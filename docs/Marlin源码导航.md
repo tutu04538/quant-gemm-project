@@ -1,6 +1,8 @@
 # Marlin 源码导航与本机环境
 
-本仓库承载自己的学习实现。当前机器上，学习对照来源是同级目录 `../vllm-from-scratch/`；下面的路径相对于那个仓库的根目录，**不是本仓库内已经复制的文件**。另一台机器上需要另行准备该参考仓库及其私有资料。
+学习对照源码现已放在工作区 [third_party/vllm_marlin](../third_party/vllm_marlin/README.md)，可以直接在 VS Code 中阅读、搜索和跳转。这里是参考项目 `minivllm` 的源码快照与按其 SM89 W4A16 构建规则生成的 selector，不是本项目从零实现的算子；原始许可证、出处、生成文件和快照边界见目录内 README。
+
+以下路径相对于 `third_party/vllm_marlin/`：
 
 - `minivllm/layers/quantization/awq.py`：AWQ 权重、加载后处理和线性层调用。
 - `minivllm/layers/quantization/marlin.py`：padding、重排、workspace 和 GEMM 包装。
@@ -9,11 +11,15 @@
 - `minivllm/csrc/quantization/marlin/marlin_template.h`：CUDA GEMM 主体。
 - `minivllm/csrc/quantization/marlin/{marlin.cuh,dequant.h,marlin_mma.h}`：异步搬运、解码和 MMA 辅助实现。
 - `minivllm/csrc/quantization/marlin/gptq_marlin_repack.cu`：加载时的权重重排。
-- `tests/step121/`、`tests/step122/`：已有重排、GEMM 的测试与对照入口。
+- `generated/sm89_w4a16/kernel_selector.h`：参考构建规则生成的特化选择分支。
 
-参考仓库的 Marlin CUDA 文件来自 vLLM commit `2cf0a6915ce544dc493a0990f2ea38d81601128a`；具体来源及许可证以其 `minivllm/csrc/quantization/marlin/PROVENANCE.md` 和 `LICENSE` 为准。若以后复制或改编代码，需保留相应许可与出处，区分移植和独立工作。
+完整参考项目的其他模块、依赖和 `tests/step121/`、`tests/step122/` 仍在本机同级 `../vllm-from-scratch/`，没有全部复制到本仓库。快照中的 Python 文件采用原有相对导入，不能脱离完整项目直接运行。
 
-本机参考仓库的环境脚本要求在它自己的根目录运行。若确实需要使用那套现有环境，可在**当前 shell**中执行：
+## VS Code
+
+仓库的 `.vscode/` 提供 CUDA/C++ 文件关联、扩展推荐和 IntelliSense 搜索路径，覆盖本仓库参考头文件、生成的 selector、本机 `~/infra/cuda-12.9`、当前虚拟环境及同级参考项目中的 PyTorch/CUBLAS 头文件。安装推荐的 Microsoft C/C++ 和 NVIDIA Nsight VS Code 插件后，直接打开本仓库。不同机器、Python 版本或工具链路径可能需要调整 `.vscode/c_cpp_properties.json`；编辑器索引不是编译验证。
+
+如需在本机当前 shell 中复用参考项目的 `.venv` 与 CUDA 工具链：
 
 ```bash
 cd ../vllm-from-scratch
@@ -21,4 +27,4 @@ source scripts/activate-4090.sh
 cd ../quant-gemm-project
 ```
 
-这会激活参考项目的 `.venv` 并配置其 CUDA 工具链；它不会为本仓库创建独立环境。是否继续复用或另建环境，由后续实际依赖决定。运行 profiler 前还需单独确认对应工具、GPU 空闲情况和硬件计数器权限。
+这不会为本仓库创建独立环境。运行 profiler 前还需单独确认对应工具、GPU 空闲情况和硬件计数器权限。
