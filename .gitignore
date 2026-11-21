@@ -23,3 +23,5 @@ models/
 
 # 本机协作约定，不向远端同步
 AGENTS.md
+
+.vscode/

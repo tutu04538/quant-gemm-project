@@ -17,7 +17,7 @@
 - `docs/`：可以公开同步的设计、布局图和实验结论。
 - `scripts/`：本机环境检查等辅助脚本。
 - `third_party/`：可在工作区直接查看的 Marlin 参考源码与出处。
-- `.vscode/`：CUDA/C++ IntelliSense 和扩展推荐。
+- `.vscode/`：本机 VS Code 设置，被 Git 忽略，不随仓库同步。
 - `learning_notes/`：不跟踪的学习路线与个人笔记。
 
 ## 环境检查
