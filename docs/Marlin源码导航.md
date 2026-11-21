@@ -17,7 +17,7 @@
 
 ## VS Code
 
-仓库的 `.vscode/` 提供 CUDA/C++ 文件关联、扩展推荐和 IntelliSense 搜索路径，覆盖本仓库参考头文件、生成的 selector、本机 `~/infra/cuda-12.9`、当前虚拟环境及同级参考项目中的 PyTorch/CUBLAS 头文件。安装推荐的 Microsoft C/C++ 和 NVIDIA Nsight VS Code 插件后，直接打开本仓库。不同机器、Python 版本或工具链路径可能需要调整 `.vscode/c_cpp_properties.json`；编辑器索引不是编译验证。
+仓库的 `.vscode/` 提供 CUDA/C++ 文件关联、扩展推荐和 IntelliSense 搜索路径，覆盖本仓库参考头文件、生成的 selector、同级 `cuda-12.9` 和 `vllm-from-scratch/.venv` 中的 PyTorch/CUBLAS 头文件；这些是当前机器上已确认存在的路径，不依赖 VS Code 启动时设置 `CUDA_HOME` 或 `VIRTUAL_ENV`。安装推荐的 Microsoft C/C++ 和 NVIDIA Nsight VS Code 插件后，直接打开本仓库。不同机器、Python 版本或工具链路径可能需要调整 `.vscode/c_cpp_properties.json`；编辑器索引不是编译验证。
 
 如需在本机当前 shell 中复用参考项目的 `.venv` 与 CUDA 工具链：
 
