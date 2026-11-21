@@ -15,9 +15,10 @@
             ],
             "defines": [
                 "USE_CUDA",
-                "TORCH_TARGET_VERSION=0x020B000000000000ULL"
+                "TORCH_TARGET_VERSION=0x020B000000000000ULL",
+                "__CUDA_ARCH__=890"
             ],
-            "compilerPath": "/usr/bin/g++",
+            "compilerPath": "${workspaceFolder}/../cuda-12.9/bin/nvcc",
             "cStandard": "c17",
             "cppStandard": "c++17",
             "intelliSenseMode": "linux-gcc-x64"
