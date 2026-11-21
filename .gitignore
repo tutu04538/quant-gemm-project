@@ -1,0 +1,22 @@
+# 本机私有学习笔记；不会随 Git 同步
+learning_notes/
+
+# Python / C++ / CUDA 构建产物
+.venv/
+__pycache__/
+.pytest_cache/
+*.py[cod]
+*.so
+*.o
+*.a
+build/
+dist/
+*.egg-info/
+
+# 运行时数据、模型权重和 profiler 原始产物
+results/
+artifacts/
+models/
+*.ncu-rep
+*.nsys-rep
+*.sqlite
