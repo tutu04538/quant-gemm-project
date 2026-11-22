@@ -1,0 +1,10 @@
+==PROF== Connected to process 2312567 (/tmp/quant_v4c_benchmark)
+==ERROR== ERR_NVGPUCTRPERM - The user does not have permission to access NVIDIA GPU Performance Counters on the target device 0. For instructions on enabling permissions and to get more information see https://developer.nvidia.com/ERR_NVGPUCTRPERM
+==PROF== Disconnected from process 2312567
+GPU=NVIDIA GeForce RTX 4090 CC=8.9 driverAPI=12020 runtime=12010 warmup=20 batches=15 repeats_per_batch=100 event_scope=100_kernel_launches batch_means_us
+case M=1 N=128 K=256 correctness V3 errors=0 max=0 mean=0 V4a errors=0 max=0 mean=0
+case M=16 N=128 K=256 correctness V3 errors=0 max=0 mean=0 V4a errors=0 max=0 mean=0
+case M=128 N=128 K=256 correctness V3 errors=0 max=0 mean=0 V4a errors=0 max=0 mean=0
+case M=128 N=512 K=1024 correctness V3 errors=0 max=0 mean=0 V4a errors=0 max=0 mean=0
+==WARNING== No kernels were profiled.
+==WARNING== Profiling kernels launched by child processes requires the --target-processes all option.

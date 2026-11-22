@@ -1,0 +1,13 @@
+ptxas info    : 0 bytes gmem
+ptxas info    : Compiling entry function '_Z8v4a_gemmPK13__nv_bfloat16PKjPKhS1_Pfiii' for 'sm_89'
+ptxas info    : Function properties for _Z8v4a_gemmPK13__nv_bfloat16PKjPKhS1_Pfiii
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 36 registers, 404 bytes cmem[0]
+ptxas info    : Compiling entry function '_Z10w4a16_gemmPK13__nv_bfloat16PKjPKhS1_Pfiii' for 'sm_89'
+ptxas info    : Function properties for _Z10w4a16_gemmPK13__nv_bfloat16PKjPKhS1_Pfiii
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 26 registers, 404 bytes cmem[0]
+ptxas info    : Compiling entry function '_Z10decode_allPKjPKhPK13__nv_bfloat16PS3_ii' for 'sm_89'
+ptxas info    : Function properties for _Z10decode_allPKjPKhPK13__nv_bfloat16PS3_ii
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 14 registers, 392 bytes cmem[0]

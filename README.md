@@ -6,7 +6,7 @@
 
 本机的学习路线位于 `learning_notes/00_从CUDA基础到手写Marlin路线.md`。我们先复习线程、内存、同步和 tiled GEMM，再阅读 Marlin 的入口、权重布局和 kernel，最后逐版独立实现和测量。
 
-`learning_notes/` 按约定被 Git 忽略，**不会同步到 GitHub**。在另一台机器克隆本仓库后，需要另行准备这些私有笔记。Marlin 学习源码快照位于 `third_party/vllm_marlin/`，已经随本仓库同步；参考范围、许可证和 VS Code 设置见 [Marlin 源码导航](docs/Marlin源码导航.md)。
+`learning_notes/` 随仓库同步，包含学习路线、课程笔记和实验记录。Marlin 学习源码快照位于 `third_party/vllm_marlin/`；参考范围、许可证和 VS Code 设置见 [Marlin 源码导航](docs/Marlin源码导航.md)。
 
 ## 目录
 

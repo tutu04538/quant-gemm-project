@@ -1,0 +1,5 @@
+index, uuid, name, driver_version, pstate, clocks.current.sm [MHz], clocks.current.memory [MHz], power.draw [W], memory.used [MiB], utilization.gpu [%]
+0, GPU-9024d349-5dea-a096-461c-814151a37a6c, NVIDIA GeForce RTX 4090, 535.309.01, P8, 210 MHz, 405 MHz, 26.36 W, 1 MiB, 0 %
+1, GPU-deb35ff6-c14d-e1d9-5b24-8a7e4eb1bbd9, NVIDIA GeForce RTX 4090, 535.309.01, P8, 210 MHz, 405 MHz, 40.06 W, 1 MiB, 0 %
+2, GPU-b173b7a3-a395-80b6-9c50-3cebe441c9f4, NVIDIA GeForce RTX 4090, 535.309.01, P8, 210 MHz, 405 MHz, 28.11 W, 1 MiB, 0 %
+3, GPU-4b94902f-c58e-c720-ac41-a2336fd4827c, NVIDIA GeForce RTX 4090, 535.309.01, P8, 210 MHz, 405 MHz, 30.78 W, 1 MiB, 0 %
