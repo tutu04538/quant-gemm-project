@@ -1,0 +1,69 @@
+GPU=NVIDIA GeForce RTX 4090 CC=8.9 driverAPI=12020 runtime=12010 warmup=20 batches=15 repeats=100 batch_means_us fractional_inputs
+M=1 N=128 K=256 frac=1 R错误=0 V5错误=0 V6错误=0 差异超差=0 max5=9.53674e-07 max6=9.53674e-07 maxdiff=0
+batch=00 order=5,6 v5_us=16.13920 v6_us=16.41600 repack_us=2.06624
+batch=01 order=6,5 v5_us=16.13088 v6_us=16.42496 repack_us=2.03776
+batch=02 order=5,6 v5_us=16.13024 v6_us=16.41472 repack_us=2.07872
+batch=03 order=6,5 v5_us=16.13824 v6_us=16.42496 repack_us=2.04800
+batch=04 order=5,6 v5_us=16.12928 v6_us=16.42496 repack_us=2.03776
+batch=05 order=6,5 v5_us=16.13824 v6_us=16.42496 repack_us=2.05824
+batch=06 order=5,6 v5_us=16.13888 v6_us=16.42432 repack_us=2.16352
+batch=07 order=6,5 v5_us=16.13120 v6_us=16.42496 repack_us=2.05504
+batch=08 order=5,6 v5_us=16.13568 v6_us=16.42496 repack_us=2.04544
+batch=09 order=6,5 v5_us=16.13120 v6_us=16.42496 repack_us=2.05664
+batch=10 order=5,6 v5_us=16.13120 v6_us=16.42176 repack_us=2.04608
+batch=11 order=6,5 v5_us=16.13024 v6_us=16.42496 repack_us=2.06848
+batch=12 order=5,6 v5_us=16.12800 v6_us=16.42496 repack_us=2.04768
+batch=13 order=6,5 v5_us=16.13824 v6_us=16.42496 repack_us=2.07680
+batch=14 order=5,6 v5_us=16.13088 v6_us=16.41568 repack_us=1.93504
+summary M=1 N=128 K=256 V5_p50=16.13120 V5_p90=16.13888 V6_p50=16.42496 V6_p90=16.42496 repack_p50=2.05504 repack_p90=2.07872 ratio=0.9821 P_bytes=16384 R_bytes=16384 P_plus_R=32768 estimated_break_even_calls=none
+M=16 N=128 K=256 frac=1 R错误=0 V5错误=0 V6错误=0 差异超差=0 max5=2.86102e-06 max6=2.86102e-06 maxdiff=0
+batch=00 order=5,6 v5_us=20.59264 v6_us=20.87936 repack_us=1.94560
+batch=01 order=6,5 v5_us=20.61248 v6_us=20.87648 repack_us=1.93536
+batch=02 order=5,6 v5_us=20.60192 v6_us=20.87936 repack_us=1.96608
+batch=03 order=6,5 v5_us=20.61120 v6_us=20.87648 repack_us=1.93536
+batch=04 order=5,6 v5_us=20.59264 v6_us=20.87936 repack_us=1.92352
+batch=05 order=6,5 v5_us=20.60288 v6_us=20.87936 repack_us=1.96288
+batch=06 order=5,6 v5_us=20.59264 v6_us=20.87904 repack_us=2.04800
+batch=07 order=6,5 v5_us=20.61216 v6_us=20.87936 repack_us=2.07136
+batch=08 order=5,6 v5_us=20.59968 v6_us=20.87872 repack_us=1.94560
+batch=09 order=6,5 v5_us=20.61312 v6_us=20.87936 repack_us=1.92512
+batch=10 order=5,6 v5_us=20.60288 v6_us=20.87936 repack_us=1.93536
+batch=11 order=6,5 v5_us=20.60288 v6_us=20.87936 repack_us=1.94560
+batch=12 order=5,6 v5_us=20.59264 v6_us=20.87744 repack_us=1.92320
+batch=13 order=6,5 v5_us=20.61312 v6_us=20.87936 repack_us=1.95584
+batch=14 order=5,6 v5_us=20.60288 v6_us=20.87936 repack_us=1.92512
+summary M=16 N=128 K=256 V5_p50=20.60288 V5_p90=20.61312 V6_p50=20.87936 V6_p90=20.87936 repack_p50=1.94560 repack_p90=2.04800 ratio=0.9868 P_bytes=16384 R_bytes=16384 P_plus_R=32768 estimated_break_even_calls=none
+M=128 N=128 K=256 frac=1 R错误=0 V5错误=0 V6错误=0 差异超差=0 max5=2.86102e-06 max6=2.86102e-06 maxdiff=0
+batch=00 order=5,6 v5_us=18.95552 v6_us=19.18784 repack_us=1.96544
+batch=01 order=6,5 v5_us=18.94400 v6_us=19.18784 repack_us=1.94560
+batch=02 order=5,6 v5_us=18.96448 v6_us=19.18976 repack_us=1.96608
+batch=03 order=6,5 v5_us=18.94400 v6_us=19.17952 repack_us=2.05920
+batch=04 order=5,6 v5_us=18.98496 v6_us=19.18976 repack_us=1.93536
+batch=05 order=6,5 v5_us=18.93408 v6_us=19.18912 repack_us=1.95584
+batch=06 order=5,6 v5_us=19.00544 v6_us=19.18976 repack_us=1.96416
+batch=07 order=6,5 v5_us=18.94400 v6_us=19.18976 repack_us=1.96448
+batch=08 order=5,6 v5_us=18.99520 v6_us=19.18976 repack_us=2.09920
+batch=09 order=6,5 v5_us=18.93504 v6_us=19.18976 repack_us=1.96320
+batch=10 order=5,6 v5_us=18.96736 v6_us=19.17952 repack_us=1.95616
+batch=11 order=6,5 v5_us=18.94400 v6_us=19.18976 repack_us=1.94720
+batch=12 order=5,6 v5_us=18.97312 v6_us=19.18976 repack_us=1.95584
+batch=13 order=6,5 v5_us=18.96224 v6_us=19.18976 repack_us=2.05824
+batch=14 order=5,6 v5_us=18.99520 v6_us=19.18976 repack_us=1.95584
+summary M=128 N=128 K=256 V5_p50=18.96224 V5_p90=18.99520 V6_p50=19.18976 V6_p90=19.18976 repack_p50=1.96320 repack_p90=2.05920 ratio=0.9881 P_bytes=16384 R_bytes=16384 P_plus_R=32768 estimated_break_even_calls=none
+M=128 N=512 K=1024 frac=1 R错误=0 V5错误=0 V6错误=0 差异超差=0 max5=1.00136e-05 max6=1.00136e-05 maxdiff=0
+batch=00 order=5,6 v5_us=73.17312 v6_us=73.74847 repack_us=1.94560
+batch=01 order=6,5 v5_us=73.16352 v6_us=73.76896 repack_us=1.95584
+batch=02 order=5,6 v5_us=73.17184 v6_us=73.74847 repack_us=1.93568
+batch=03 order=6,5 v5_us=73.15456 v6_us=73.76832 repack_us=1.93760
+batch=04 order=5,6 v5_us=73.16288 v6_us=73.75872 repack_us=1.69984
+batch=05 order=6,5 v5_us=73.17504 v6_us=73.74688 repack_us=1.72032
+batch=06 order=5,6 v5_us=73.16193 v6_us=73.75776 repack_us=1.66880
+batch=07 order=6,5 v5_us=73.16576 v6_us=73.73152 repack_us=1.64864
+batch=08 order=5,6 v5_us=73.14432 v6_us=73.76096 repack_us=1.65888
+batch=09 order=6,5 v5_us=73.16480 v6_us=73.78656 repack_us=1.65888
+batch=10 order=5,6 v5_us=73.15456 v6_us=73.76896 repack_us=1.66912
+batch=11 order=6,5 v5_us=73.16480 v6_us=73.74624 repack_us=1.64864
+batch=12 order=5,6 v5_us=73.14432 v6_us=73.74847 repack_us=1.66912
+batch=13 order=6,5 v5_us=73.17376 v6_us=73.73824 repack_us=1.65760
+batch=14 order=5,6 v5_us=73.17504 v6_us=73.76896 repack_us=1.65568
+summary M=128 N=512 K=1024 V5_p50=73.16480 V5_p90=73.17504 V6_p50=73.75776 V6_p90=73.76896 repack_p50=1.66912 repack_p90=1.94560 ratio=0.9920 P_bytes=262144 R_bytes=262144 P_plus_R=524288 estimated_break_even_calls=none

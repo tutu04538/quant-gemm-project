@@ -1,0 +1,42 @@
+
+Fatbin elf code:
+================
+arch = sm_89
+code version = [1,7]
+host = linux
+compile_size = 64bit
+identifier = benchmarks/v6c_benchmark.cu 
+
+Resource usage:
+ Common:
+  GLOBAL:0
+
+Fatbin elf code:
+================
+arch = sm_89
+code version = [1,7]
+host = linux
+compile_size = 64bit
+identifier = benchmarks/v6c_benchmark.cu
+
+Resource usage:
+ Common:
+  GLOBAL:0
+ Function _Z7v6_gemmPK13__nv_bfloat16PKjPKhS1_Pfiii:
+  REG:40 STACK:0 SHARED:768 LOCAL:0 CONSTANT[0]:404 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _Z13repack_k_to_nPKjPjii:
+  REG:20 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:376 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _Z9v5ef_gemmPK13__nv_bfloat16PKjPKhS1_Pfiii:
+  REG:40 STACK:0 SHARED:768 LOCAL:0 CONSTANT[0]:404 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _Z12ldmatrix_mmaPK13__nv_bfloat16S1_PfPj:
+  REG:22 STACK:0 SHARED:768 LOCAL:0 CONSTANT[0]:384 TEXTURE:0 SURFACE:0 SAMPLER:0
+
+Fatbin ptx code:
+================
+arch = sm_89
+code version = [8,1]
+host = linux
+compile_size = 64bit
+compressed
+identifier = benchmarks/v6c_benchmark.cu
+ptxasOptions = -v  --generate-line-info 
