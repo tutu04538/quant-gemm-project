@@ -1,0 +1,23 @@
+In file included from benchmarks/v6o_benchmark_wrapper.cu:3:
+benchmarks/../kernels/marlin_from_scratch/v6o_four_block_template.cu:7: warning: "main" redefined
+    7 | #define main v2d_old_test_main
+      | 
+benchmarks/v6o_benchmark_wrapper.cu:2: note: this is the location of the previous definition
+    2 | #define main v6o_training_main
+      | 
+In file included from benchmarks/v6o_benchmark_wrapper.cu:3:
+benchmarks/../kernels/marlin_from_scratch/v6o_four_block_template.cu:7: warning: "main" redefined
+    7 | #define main v2d_old_test_main
+      | 
+benchmarks/v6o_benchmark_wrapper.cu:2: note: this is the location of the previous definition
+    2 | #define main v6o_training_main
+      | 
+ptxas info    : 0 bytes gmem
+ptxas info    : Compiling entry function '_Z11v6o_computePK13__nv_bfloat16PKjS3_S1_S1_PS_PfS5_Pi' for 'sm_89'
+ptxas info    : Function properties for _Z11v6o_computePK13__nv_bfloat16PKjS3_S1_S1_PS_PfS5_Pi
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 95 registers, 18432 bytes smem, 424 bytes cmem[0]
+ptxas info    : Compiling entry function '_Z12ldmatrix_mmaPK13__nv_bfloat16S1_PfPj' for 'sm_89'
+ptxas info    : Function properties for _Z12ldmatrix_mmaPK13__nv_bfloat16S1_PfPj
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 22 registers, 768 bytes smem, 384 bytes cmem[0]

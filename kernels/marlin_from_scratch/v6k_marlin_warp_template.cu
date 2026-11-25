@@ -11,15 +11,62 @@ __global__ void v6k_warps(const __nv_bfloat16* a,const uint32_t* bfrag,float* ou
     __shared__ __align__(16) __nv_bfloat16 as[4][16][16];
     __shared__ float partial[4][16][64];
     int warp=threadIdx.x/32,lane=threadIdx.x%32;
-    bool ready=false;if(!ready)return; // 必须全 block 一致
+    bool ready=true;if(!ready)return; // 必须全 block 一致
     // TODO 1：每 warp K 范围 warp*32..warp*32+31；每 lane acc[4][2][4] 清零。
     // TODO 2：逐 step=0,1，协作加载 A 到各 warp 的 as 并同步，load_a。
     // TODO 3：逐 j=0..3，从 bfrag[warp,step,lane,j,0..3] 加载对应 4 个
     // BF16x2 寄存器；分别执行两条 MMA，更新各 j 的两个 acc。
     // TODO 4：warp 内同步后复用 as；按 lane 输出坐标把 acc 写 partial[warp]。
+    float acc[4][2][4] = {};
+    uint32_t af[4] = {};
+    uint32_t bf[4] = {};
+    for (int step = 0; step < 2; step++) {
+        const __nv_bfloat16* a_start_addr = a + warp*32 + step*16;
+        for (int i = lane; i < 256; i += 32) {
+            as[warp][i/16][i%16] = a_start_addr[i/16*128+i%16];
+        }
+        __syncwarp();
+        __nv_bfloat16 *a_local_addr = &as[warp][0][0] + lane%16*16 + (lane<16?0:8);
+        load_a(__cvta_generic_to_shared(a_local_addr), af);
+        for (int j = 0; j < 4; j++) {
+            for (int t = 0; t < 4; t++) {
+                bf[t] = bfrag[warp*(2*32*4*4)+step*(32*4*4)+lane*(4*4)+j*4+t];
+            }
+            __syncwarp();
+            asm volatile("mma.sync.aligned.m16n8k16.row.col.f32.bf16.bf16.f32 "
+                "{%0,%1,%2,%3}, {%4,%5,%6,%7}, {%8,%9}, {%0,%1,%2,%3};\n"
+                : "+f"(acc[j][0][0]), "+f"(acc[j][0][1]), "+f"(acc[j][0][2]), "+f"(acc[j][0][3])
+                : "r"(af[0]), "r"(af[1]), "r"(af[2]), "r"(af[3]), "r"(bf[0]), "r"(bf[1]));
+
+            asm volatile("mma.sync.aligned.m16n8k16.row.col.f32.bf16.bf16.f32 "
+                "{%0,%1,%2,%3}, {%4,%5,%6,%7}, {%8,%9}, {%0,%1,%2,%3};\n"
+                : "+f"(acc[j][1][0]), "+f"(acc[j][1][1]), "+f"(acc[j][1][2]), "+f"(acc[j][1][3])
+                : "r"(af[0]), "r"(af[1]), "r"(af[2]), "r"(af[3]), "r"(bf[2]), "r"(bf[3]));
+        }
+    }
+    int g = lane / 4, t = lane % 4;
+    for (int j = 0; j < 4; j++) {
+        partial[warp][g][j*16+t*2] = acc[j][0][0];
+        partial[warp][g][j*16+t*2+1] = acc[j][0][1];
+        partial[warp][g+8][j*16+t*2] = acc[j][0][2];
+        partial[warp][g+8][j*16+t*2+1] = acc[j][0][3];
+        partial[warp][g][j*16+8+t*2] = acc[j][1][0];
+        partial[warp][g][j*16+8+t*2+1] = acc[j][1][1];
+        partial[warp][g+8][j*16+8+t*2] = acc[j][1][2];
+        partial[warp][g+8][j*16+8+t*2+1] = acc[j][1][3];
+    }
     __syncthreads();
     for(int i=threadIdx.x;i<4*16*64;i+=128)debug[i]=partial[i/(16*64)][(i/64)%16][i%64];
     // TODO 5：由 warp 0 把四份 partial 相加，写 out[16,64]。
+    if (warp == 0) {
+        for (int i = lane; i < 16*64; i += 32) {
+            float o = 0.0f;
+            for (int w = 0; w < 4; w++) {
+                o += partial[w][i/64][i%64];
+            }
+            out[i] = o;
+        }
+    }
     (void)a;(void)bfrag;(void)out;(void)as;(void)warp;(void)lane;
 }
 static bool test_case(unsigned seed) {

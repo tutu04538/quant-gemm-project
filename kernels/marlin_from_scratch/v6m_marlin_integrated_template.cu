@@ -13,12 +13,73 @@ __global__ void v6m_compute(const __nv_bfloat16* a,const uint32_t* q,const uint3
     // 两个 block 分别处理 kr=0/1，各 4 warp；nr 固定为 0。
     __shared__ __align__(16) __nv_bfloat16 as[4][16][16];
     int kr=blockIdx.x,warp=threadIdx.x/32,lane=threadIdx.x%32;
-    bool ready=false;if(!ready)return; // 两个 block 各自全部线程一致
+    bool ready=true;if(!ready)return; // 两个 block 各自全部线程一致
     // TODO 1：每 lane 准备 acc[4 j][2 MMA][4 float]；warp 的两个 K16 step。
     // TODO 2：加载 A 并用 ldmatrix 得到 af，按 V6i 的参考物理 Q/Z/S 取四对 B。
     // TODO 3：对每个 j 的 bf0、bf1 各做 MMA，累加；每次复用 as 前保证 warp 同步。
     // TODO 4：按每 lane 的坐标把各 warp 的结果写入 partial[kr][warp][16][64]。
     // 不做跨 warp/block 归约；全部 partial 由 host 独立验证。
+    float acc[4][2][4] = {};
+    uint32_t af[4] = {};
+    uint32_t bf[4] = {};
+    uint32_t bfrag[16];
+    uint32_t MASK = 0x000f000f, EX = 0x43004300;
+    for (int step = 0; step < 2; step++) {
+        const __nv_bfloat16* a_start_addr = a + kr*128 + warp*32 + step*16;
+        for (int i = lane; i < 256; i += 32) {
+            as[warp][i/16][i%16] = a_start_addr[i/16*256+i%16];
+        }
+        __syncwarp();
+        __nv_bfloat16 *a_local_addr = &as[warp][0][0] + lane%16*16 + (lane<16?0:8);
+        load_a(__cvta_generic_to_shared(a_local_addr), af);
+        uint32_t q_z = z[kr*16+lane/4];
+        __nv_bfloat162 qweight[4], qzero[2], qscale[2];
+        for (int j = 0; j < 4; j++) {
+            uint32_t q_weight = q[kr*(256*8)+warp*256*2+step*256+lane*4+j];
+            __nv_bfloat16 s1 = s[kr*128+lane/4*8+j*2];
+            __nv_bfloat16 s2 = s[kr*128+lane/4*8+j*2+1];
+            qscale[0] = __halves2bfloat162(s1, s1);
+            qscale[1] = __halves2bfloat162(s2, s2);
+            uint32_t q_zj = v6m_lop3(q_z >> (4 * j), MASK, EX);
+            qzero[0] = __halves2bfloat162(__ushort_as_bfloat16(q_zj&0xffff), __ushort_as_bfloat16(q_zj&0xffff));
+            qzero[1] = __halves2bfloat162(__ushort_as_bfloat16((q_zj>>16)&0xffff), __ushort_as_bfloat16((q_zj>>16)&0xffff));
+            for (int p = 0; p < 4; p++) {
+                uint32_t t = v6m_lop3(q_weight >> (4 * p), MASK, EX);
+                qweight[p] = __halves2bfloat162(__ushort_as_bfloat16(t&0xffff), __ushort_as_bfloat16((t>>16)&0xffff));
+                __nv_bfloat162_raw raw = __hmul2(__hsub2(qweight[p], qzero[p/2]), qscale[p/2]); 
+                bfrag[j*4+p] = static_cast<uint32_t>(raw.x) | (static_cast<uint32_t>(raw.y) << 16);
+            }
+        }
+
+        for (int j = 0; j < 4; j++) {
+            for (int t = 0; t < 4; t++) {
+                bf[t] = bfrag[j*4+t];
+            }
+            __syncwarp();
+            asm volatile("mma.sync.aligned.m16n8k16.row.col.f32.bf16.bf16.f32 "
+                "{%0,%1,%2,%3}, {%4,%5,%6,%7}, {%8,%9}, {%0,%1,%2,%3};\n"
+                : "+f"(acc[j][0][0]), "+f"(acc[j][0][1]), "+f"(acc[j][0][2]), "+f"(acc[j][0][3])
+                : "r"(af[0]), "r"(af[1]), "r"(af[2]), "r"(af[3]), "r"(bf[0]), "r"(bf[1]));
+
+            asm volatile("mma.sync.aligned.m16n8k16.row.col.f32.bf16.bf16.f32 "
+                "{%0,%1,%2,%3}, {%4,%5,%6,%7}, {%8,%9}, {%0,%1,%2,%3};\n"
+                : "+f"(acc[j][1][0]), "+f"(acc[j][1][1]), "+f"(acc[j][1][2]), "+f"(acc[j][1][3])
+                : "r"(af[0]), "r"(af[1]), "r"(af[2]), "r"(af[3]), "r"(bf[2]), "r"(bf[3]));
+        }
+    }
+
+    int g = lane / 4, t = lane % 4;
+    for (int j = 0; j < 4; j++) {
+        partial[kr*4*16*64+warp*16*64+g*64+j*16+t*2] = acc[j][0][0];
+        partial[kr*4*16*64+warp*16*64+g*64+j*16+t*2+1] = acc[j][0][1];
+        partial[kr*4*16*64+warp*16*64+(g+8)*64+j*16+t*2] = acc[j][0][2];
+        partial[kr*4*16*64+warp*16*64+(g+8)*64+j*16+t*2+1] = acc[j][0][3];
+        partial[kr*4*16*64+warp*16*64+g*64+j*16+8+t*2] = acc[j][1][0];
+        partial[kr*4*16*64+warp*16*64+g*64+j*16+8+t*2+1] = acc[j][1][1];
+        partial[kr*4*16*64+warp*16*64+(g+8)*64+j*16+8+t*2] = acc[j][1][2];
+        partial[kr*4*16*64+warp*16*64+(g+8)*64+j*16+8+t*2+1] = acc[j][1][3];
+    }
+
     (void)a;(void)q;(void)z;(void)s;(void)partial;(void)as;(void)kr;(void)warp;(void)lane;
 }
 static bool run_case(unsigned seed){

@@ -330,6 +330,8 @@ WMMA 先建立 warp 协作模型；V2d 才为以后精确控制 fragment 布局�
 | V6k：四 warp 部分和 | 使用与参考一致的 K 分工和 B 片段坐标，在一个 block 中计算四个 warp 的 16×64 部分和。 | 逐 warp 验证部分和与合并结果；诊断缓冲与归约方式不冒称参考 shared 协议。 |
 | V6l：参考写回数值顺序 | 按固定分支核对 FP32→BF16 与 BF16 bias 加法的顺序，并用精确 bit 测试证明与先加再舍入的差异；列出后续拼图。 | 覆盖舍入中点、正负值；只验证标量 epilogue 数值，不冒称完成参考的跨 block 归约与 shared 写回。 |
 | V6m：参考布局融合四 warp | 把参考 repacked Q/Z/S 的逐 lane 解码和两条 MMA 直接连接在一个 kernel；固定 N tile 0、两个 K group、每 block 4 warp。 | 按逻辑输入独立验证两个 group × 4 warp 的每项部分和；明确不包含参考 `cp.async`、参考归约、bias 与完整输出。 |
+| V6n：固定形状完整输出 | 基于 V6m 覆盖两个 N tile 和 K group，合并四 warp 部分和并按 BF16 舍入后加 bias，输出完整 16×128。 | 与逻辑 Q/Z/S 的独立 CPU 参考比较，覆盖 group/tile 边界和非精确 scale；教学归约不同于参考实现，不代表任意形状或上游差分完成。 |
+| V6o：四 block 和跨 block 归约 | 按固定实例的两个 N tile、两个 K group 分成四个 block；学习 FP32 临时缓冲与 acquire/release 锁的发布、等待、复位。 | 独立参考逐元素对照，覆盖 tile/group 边界与锁重复使用；说明临时布局、归约及调度仍经简化，后续需要参考 kernel 差分验证。 |
 
 V6a～V6d 保留为历史对照；V6c 已完成声明范围内的正确性验证及一次性能初测。V6f 对齐参考 repack 的 tile 内 warp/lane 输出映射；其简化 launch 和搬运过程不等同完整参考实现。V6g 的 S/Z 输出布局对照参考，独立 kernel 的线程分工不是 PyTorch 准备步骤的线程协议。V6h～V6m 的新文档和模板按固定参考输入与片段映射重写，先以独立测试逐层验证，再在 V6m 融合；参考流水线、线程块归约、全局归约和完整 epilogue 仍需 V7～V9。旧的简化模板已标记为历史草稿，不再作为主线。
 

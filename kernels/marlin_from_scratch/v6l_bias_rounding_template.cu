@@ -5,6 +5,7 @@ __global__ void v6l_epilogue(const float* acc,const __nv_bfloat16* bias,__nv_bfl
     int i=blockIdx.x*blockDim.x+threadIdx.x;if(i>=count)return;
     // TODO：将 acc[i] 先用 RN 转 BF16，再用 BF16 __hadd 与 bias[i] 相加并写出。
     // 这只模拟参考 write_result 的一对数值操作，不模拟其完整 shared 输出布局。
+    out[i] = __hadd(__float2bfloat16_rn(acc[i]), bias[i]); 
     (void)acc;(void)bias;(void)out;
 }
 int main() {
